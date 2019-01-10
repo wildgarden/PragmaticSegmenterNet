@@ -12,4 +12,8 @@
     <PackageId>PragmaticSegmenterNet</PackageId>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="xunit" Version="2.4.1" />
+  </ItemGroup>
+
 </Project>
