@@ -205,7 +205,7 @@
             segment = segment.Replace("\n", string.Empty).Trim();
 
             // reinsert \n for \r inverse the ReplaceNewlineWithCarriageReturnRule
-            segment = segment.Replace("\r", "\n");
+            segment = segment.Replace("\r", "\n").Trim();
 
             return new[] { segment };
         }
