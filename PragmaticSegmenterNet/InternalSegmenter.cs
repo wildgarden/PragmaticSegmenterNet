@@ -13,9 +13,11 @@
         private static readonly Regex BetweenQuotesSecondRegex = new Regex(@"(?<=\))\s");
         private static readonly Regex ShortSegmentRegex = new Regex(@"\A[a-zA-Z]*\Z");
         private static readonly Regex ConsecutiveUnderscoreRegex = new Regex(@"_{3,}");
+        private static readonly Rule ReplaceNewlineWithCarriageReturnRule = new Rule(@"\n", "\r");
 
         public static IReadOnlyList<string> Segment(string text, ILanguage language)
         {
+            text = ReplaceNewlineWithCarriageReturnRule.Apply(text);
             var splitByReference = ReferenceSeparator.SeparateReferences(text);
             var newLined = CheckForParenthesesBetweenQuotes(splitByReference, language);
             var parts = newLined.Split(NewLineSplit)
@@ -201,6 +203,9 @@
             }
 
             segment = segment.Replace("\n", string.Empty).Trim();
+
+            // reinsert \n for \r inverse the ReplaceNewlineWithCarriageReturnRule
+            segment = segment.Replace("\r", "\n");
 
             return new[] { segment };
         }
