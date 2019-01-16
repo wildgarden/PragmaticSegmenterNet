@@ -1,10 +1,12 @@
-﻿namespace PragmaticSegmenterNet
+﻿using System;
+
+namespace PragmaticSegmenterNet
 {
     using System.Collections.Generic;
 
     public static class Segmenter
     {
-        public static IReadOnlyList<string> Segment(string text, Language language = Language.English, bool cleanText = true, DocumentType documentType = DocumentType.Any)
+        public static IReadOnlyList<string> Segment(string text, Operation operation, Language language = Language.English, DocumentType documentType = DocumentType.Any)
         {
             if (string.IsNullOrWhiteSpace(text))
             {
@@ -18,7 +20,7 @@
 
             var matchingLanguage = LanguageProvider.Get(language);
 
-            if (cleanText)
+            if ((operation & Operation.Clean) == Operation.Clean)
             {
                 text = Cleaner.Clean(text, matchingLanguage, documentType);
             }
@@ -27,5 +29,14 @@
 
             return result;
         }
+    }
+
+    [Flags]
+    public enum Operation
+    {
+        None = 0,
+        Segment = 1,
+        Clean = 0x1 << 1,
+        SegmentAndClean = Segment | Clean
     }
 }
